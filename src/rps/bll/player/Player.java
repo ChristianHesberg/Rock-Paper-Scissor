@@ -155,7 +155,7 @@ public class Player implements IPlayer {
 
 
 
-        if (state.getRoundNumber() < 2) {
+        if (state.getRoundNumber() <= 2) {
             Random random = new Random();
             if (random.nextInt(3) == 2) {
                 return Move.Rock;
@@ -178,44 +178,44 @@ public class Player implements IPlayer {
             transitionMatrix[row][column] = transitionMatrix[row][column] +1;
 
 
-            int initRowCount = -1;
+            /*int initRowCount = -1;
+            int startValue = -1;
             for (int i = 0; i < rowAmount; i++) {
-                if (transitionMatrix[i][column] > initRowCount) {
+                if (transitionMatrix[i][column] > startValue) {
+                    startValue = transitionMatrix[i][column];
                     initRowCount = i;
                 }
             }
 
-            if (initRowCount == 0) {
-                for(int i=0; i<rowAmount; i++)
-                {
-                    for(int k=0; k<columnAmount; k++)
-                    {
-                        System.out.println(transitionMatrix[i][k]);
-                    }
-                }
+             */
+
+
+            if (row == 0) {
+
+                printMatrix();
                 return Move.Paper;
             }
-            if (initRowCount == 1) {
-                for(int i=0; i<rowAmount; i++)
-                {
-                    for(int k=0; k<columnAmount; k++)
-                    {
-                        System.out.println(transitionMatrix[i][k]);
-                    }
-                }
+            if (row == 1) {
+
+                printMatrix();
                 return Move.Scissor;
             }
-            if (initRowCount == 2) {
-                for(int i=0; i<rowAmount; i++)
-                {
-                    for(int k=0; k<columnAmount; k++)
-                    {
-                        System.out.println(transitionMatrix[i][k]);
-                    }
-                }
+            if (row == 2) {
+                printMatrix();
                 return Move.Rock;
             }
         }
-        return Move.Rock;
+        return null;
+    }
+
+    private void printMatrix()
+    {
+        for(int i=0; i<rowAmount; i++)
+        {
+            for(int k=0; k<columnAmount; k++)
+            {
+                System.out.println(transitionMatrix[i][k]);
+            }
+        }
     }
 }
