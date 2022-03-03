@@ -154,52 +154,40 @@ public class Player implements IPlayer {
         int roundNumber = state.getRoundNumber();
 
         if (roundNumber <= 2) {
-            Random random = new Random();
-            int randNumber = random.nextInt(3);
-            if (randNumber == 2) {
-                return Move.Rock;
-            }
-            if (randNumber == 1) {
-                return Move.Paper;
-            }
-            if (randNumber == 0) {
-                return Move.Scissor;
-            }
+            return randomMove();
         }
 
         if (roundNumber > 2) {
-            Result movePair = results.get(roundNumber - 3);
-            Result transition = results.get(roundNumber - 2);
+            Result twoBack = results.get(roundNumber - 3);
+            Result oneBack = results.get(roundNumber - 2);
 
-            int row = calculateMatrixRow(transition);
-            int column = calculateMatrixColumn(movePair);
-
-            int startingValue= -1;
-            int selectRow = -1;
-            for(int i=0; i<rowAmount; i++)
-            {
-                if(transitionMatrix[i][column]>startingValue)
-                {
-                    startingValue = transitionMatrix[i][column];
-                    selectRow = i;
-                }
-            }
+            int row = calculateMatrixRow(oneBack);
+            int column = calculateMatrixColumn(twoBack);
+            int newColumn = calculateMatrixColumn(oneBack);
 
             transitionMatrix[row][column] = transitionMatrix[row][column] +1;
 
-            System.out.println("Select Row: "+selectRow);
+            int startingValue= 0;
+            int selectRow = -1;
+            for(int i=0; i<rowAmount; i++)
+            {
+                if(transitionMatrix[i][newColumn]>startingValue)
+                {
+                    startingValue = transitionMatrix[i][newColumn];
+                    selectRow = i;
+                }
+            }
+            if(selectRow == -1)
+            {
+                return randomMove();
+            }
             if (selectRow == 0) {
-
-                printMatrix();
                 return Move.Paper;
             }
             if (selectRow == 1) {
-
-                printMatrix();
                 return Move.Scissor;
             }
             if (selectRow == 2) {
-                printMatrix();
                 return Move.Rock;
             }
         }
@@ -214,6 +202,25 @@ public class Player implements IPlayer {
             {
                 System.out.println(transitionMatrix[i][k]);
             }
+        }
+    }
+
+    private Move randomMove()
+    {
+        Random random = new Random();
+        int randNumber = random.nextInt(3);
+        if (randNumber == 2) {
+            return Move.Rock;
+        }
+        if (randNumber == 1) {
+            return Move.Paper;
+        }
+        if (randNumber == 0) {
+            return Move.Scissor;
+        }
+        else
+        {
+            return null;
         }
     }
 }
