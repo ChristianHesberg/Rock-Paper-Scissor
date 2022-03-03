@@ -153,54 +153,52 @@ public class Player implements IPlayer {
 
         int roundNumber = state.getRoundNumber();
 
-
-
-        if (state.getRoundNumber() <= 2) {
+        if (roundNumber <= 2) {
             Random random = new Random();
-            if (random.nextInt(3) == 2) {
+            int randNumber = random.nextInt(3);
+            if (randNumber == 2) {
                 return Move.Rock;
             }
-            if (random.nextInt(3) == 1) {
+            if (randNumber == 1) {
                 return Move.Paper;
             }
-            if (random.nextInt(3) == 0) {
+            if (randNumber == 0) {
                 return Move.Scissor;
             }
         }
 
-        if (state.getRoundNumber() > 2) {
+        if (roundNumber > 2) {
             Result movePair = results.get(roundNumber - 3);
             Result transition = results.get(roundNumber - 2);
 
             int row = calculateMatrixRow(transition);
             int column = calculateMatrixColumn(movePair);
 
-            transitionMatrix[row][column] = transitionMatrix[row][column] +1;
-
-
-            /*int initRowCount = -1;
-            int startValue = -1;
-            for (int i = 0; i < rowAmount; i++) {
-                if (transitionMatrix[i][column] > startValue) {
-                    startValue = transitionMatrix[i][column];
-                    initRowCount = i;
+            int startingValue= -1;
+            int selectRow = -1;
+            for(int i=0; i<rowAmount; i++)
+            {
+                if(transitionMatrix[i][column]>startingValue)
+                {
+                    startingValue = transitionMatrix[i][column];
+                    selectRow = i;
                 }
             }
 
-             */
+            transitionMatrix[row][column] = transitionMatrix[row][column] +1;
 
-
-            if (row == 0) {
+            System.out.println("Select Row: "+selectRow);
+            if (selectRow == 0) {
 
                 printMatrix();
                 return Move.Paper;
             }
-            if (row == 1) {
+            if (selectRow == 1) {
 
                 printMatrix();
                 return Move.Scissor;
             }
-            if (row == 2) {
+            if (selectRow == 2) {
                 printMatrix();
                 return Move.Rock;
             }
