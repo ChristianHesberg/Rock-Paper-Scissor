@@ -144,6 +144,7 @@ public class Player implements IPlayer {
         return -100;
     }
 
+
     @Override
     public Move doMove(IGameState state) {
         //Historic data to analyze and decide next move...
@@ -167,19 +168,26 @@ public class Player implements IPlayer {
 
             transitionMatrix[row][column] = transitionMatrix[row][column] +1;
 
-            int startingValue= 0;
+            int highestValue= 0;
             int selectRow = -1;
             for(int i=0; i<rowAmount; i++)
             {
-                if(transitionMatrix[i][newColumn]>startingValue)
+                if(transitionMatrix[i][newColumn]>highestValue)
                 {
-                    startingValue = transitionMatrix[i][newColumn];
+                    highestValue = transitionMatrix[i][newColumn];
                     selectRow = i;
                 }
             }
+
+            if(tieBreaker(transitionMatrix, newColumn, highestValue)!= -1)
+            {
+                selectRow = tieBreaker(transitionMatrix, newColumn, highestValue);
+            }
+
             if(selectRow == -1)
             {
-                return randomMove();
+                Random random = new Random();
+                selectRow = random.nextInt(3);
             }
             if (selectRow == 0) {
                 return Move.Paper;
@@ -223,4 +231,73 @@ public class Player implements IPlayer {
             return null;
         }
     }
+
+    private int tieBreaker(int[][] matrix, int column, int highestValue)
+    {
+        if(matrix[0][column] == highestValue && highestValue!= 0 && matrix[0][column] == matrix[1][column] && matrix[0][column] == matrix[2][column])
+        {
+            Random random = new Random();
+            return random.nextInt(3);
+        }
+        if(matrix[0][column] == highestValue && matrix[0][column]!= 0 && matrix[0][column] == matrix[1][column])
+        {
+            return 0;
+        }
+        if(matrix[0][column] == highestValue && matrix[0][column]!= 0 && matrix[0][column] == matrix[2][column])
+        {
+            return 2;
+        }
+        if(matrix[1][column] == highestValue && matrix[1][column]!= 0 && matrix[1][column] == matrix[2][column])
+        {
+            return 1;
+        }
+        else
+        {
+            return -1;
+        }
+
+    }
+
+        /*private int checkMostPlayed(int[][] matrix)
+    {
+        int row1 = 0;
+        int row2 = 0;
+        int row3 = 0;
+        for(int i=0; i<rowAmount; i++)
+        {
+            for(int k=0; k<columnAmount; i++)
+            {
+                if(i==0)
+                {
+                    row1 += matrix[i][k];
+                }
+                if(i==1)
+                {
+                    row2 += matrix[i][k];
+                }
+                if(i==2)
+                {
+                    row3 += matrix[i][k];
+                }
+            }
+        }
+        if(row1 > row2 && row1 > row3)
+        {
+            return 0;
+        }
+        if(row2 > row1 && row2 >row3)
+        {
+            return 1;
+        }
+        if(row3 > row1 && row3 > row2)
+        {
+            return 2;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+
+     */
 }
